@@ -618,6 +618,12 @@ class Decompiler(object):
     def JUMP_IF_FALSE(decompiler, endpos):
         return decompiler.conditional_jump(endpos, False)
 
+    def POP_JUMP_IF_NONE(decompiler, endpos):
+        return decompiler.conditional_jump(endpos, False)
+
+    def POP_JUMP_IF_NOT_NONE(decompiler, endpos):
+        return decompiler.conditional_jump(endpos, True)
+
     JUMP_IF_FALSE_OR_POP = JUMP_IF_FALSE
 
     def JUMP_IF_NOT_EXC_MATCH(decompiler, endpos):

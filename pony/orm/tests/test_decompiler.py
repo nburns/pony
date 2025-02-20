@@ -176,6 +176,59 @@ class TestDecompiler(unittest.TestCase):
                   is_async=0)])
             """)
 
+    def test_ast_none(self):
+        self.assertDecompilesTo(
+            '(m for m in [] if (x is None or y))',
+            """
+            GeneratorExp(
+              elt=Name(id='m', ctx=Load()),
+              generators=[
+                comprehension(
+                  target=Name(id='m', ctx=Store()),
+                  iter=Name(id='.0', ctx=Load()),
+                  ifs=[
+                    BoolOp(
+                      op=Or(),
+                      values=[
+                        Compare(
+                          left=Name(id='x', ctx=Load()),
+                          ops=[
+                            Is()],
+                          comparators=[
+                            Constant(value=None)]),
+                        Name(id='y', ctx=Load())])],
+                  is_async=0)])
+
+            """
+            )
+
+    def test_ast_not_none(self):
+        self.assertDecompilesTo(
+            '(m for m in [] if (x is not None or y))',
+            """
+            GeneratorExp(
+              elt=Name(id='m', ctx=Load()),
+              generators=[
+                comprehension(
+                  target=Name(id='m', ctx=Store()),
+                  iter=Name(id='.0', ctx=Load()),
+                  ifs=[
+                    BoolOp(
+                      op=Or(),
+                      values=[
+                        Compare(
+                          left=Name(id='x', ctx=Load()),
+                          ops=[
+                            IsNot()],
+                          comparators=[
+                            Constant(value=None)]),
+                        Name(id='y', ctx=Load())])],
+                  is_async=0)])
+
+            """
+            )
+
+
 
 for i, gen in enumerate(generate_gens()):
     test_method = create_test(gen)
